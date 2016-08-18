@@ -187,12 +187,12 @@ func (s *StubHandlerRedirect) ServeStub(w http.ResponseWriter, req *http.Request
 		if stub.Resp.StatusCode != 200 {
 			return fmt.Errorf("fetchModifyStub returned: %d", stub.Resp.StatusCode)
 		}
-		err := s.Storage.Put(key, stub.Resp.Header.Get("Content-Type"), bytes.NewReader(stub.Data))
+		err = s.Storage.Put(key, stub.Resp.Header.Get("Content-Type"), bytes.NewReader(stub.Data))
 		if err != nil {
 			return fmt.Errorf("Put %v", err)
 		}
 	}
-	http.Redirect(w, req, s.CDNPrefix+s3Key, http.StatusTemporaryRedirect)
+	http.Redirect(w, req, s.CDNPrefix+key, http.StatusTemporaryRedirect)
 	return nil
 }
 
