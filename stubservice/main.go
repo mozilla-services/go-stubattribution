@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	raven "github.com/getsentry/raven-go"
+	"github.com/mozilla-services/go-stubattribution/stubservice/backends"
 	"github.com/mozilla-services/go-stubattribution/stubservice/stubhandlers"
 )
 
@@ -69,10 +72,14 @@ func versionHandler(w http.ResponseWriter, req *http.Request) {
 func main() {
 	var stubHandler stubhandlers.StubHandler
 	if returnMode == "redirect" {
+		storage := backends.S3{
+			Bucket: s3Bucket,
+			Svc:    s3.New(session.New()),
+		}
 		stubHandler = &stubhandlers.StubHandlerRedirect{
 			CDNPrefix: cdnPrefix,
-			S3Bucket:  s3Bucket,
-			S3Prefix:  s3Prefix,
+			Storage:   storageBackend,
+			KeyPrefix: s3Prefix,
 		}
 	} else {
 		stubHandler = &stubhandlers.StubHandlerDirect{}
