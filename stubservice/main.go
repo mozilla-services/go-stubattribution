@@ -72,13 +72,10 @@ func versionHandler(w http.ResponseWriter, req *http.Request) {
 func main() {
 	var stubHandler stubhandlers.StubHandler
 	if returnMode == "redirect" {
-		storage := backends.S3{
-			Bucket: s3Bucket,
-			Svc:    s3.New(session.New()),
-		}
+		storage := backends.NewS3(s3.New(session.New()), s3Bucket)
 		stubHandler = &stubhandlers.StubHandlerRedirect{
 			CDNPrefix: cdnPrefix,
-			Storage:   storageBackend,
+			Storage:   storage,
 			KeyPrefix: s3Prefix,
 		}
 	} else {
