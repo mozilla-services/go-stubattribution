@@ -1,2 +1,1 @@
-# Stub Attribution
-A service which accepts an attribution code and returns a modified stub installer.
+This project has been moved to [mozilla-services/stub_attribution](mozilla-services/stub_attribution).
